@@ -1,4 +1,4 @@
-const musicInfo = [];
+let musicInfo = [];
 
 function addSongFromField(event) {
   event.preventDefault();
@@ -24,14 +24,19 @@ function renderList() {
     const $item = $('<li class="list-group-item">').text(info);
     $item.append("<input type='button' value='delete' class='del'>");
     $list.append($item);
+    let objToDelete = [];
+    let textToDelete = [];
     $(".del").click(function() {
-      let x = $(this).parent();
-      x.remove();
+      objToDelete = $(this).parent(); 
+      textToDelete.push(objToDelete.text());
+      objToDelete.remove();
+      let newMusicInfo = musicInfo.filter(function(x) {
+        return x != textToDelete;
+      }); console.log("new" + newMusicInfo)
+      musicInfo = newMusicInfo;
     });
   }
 }
-
-
 
 $('#getPlaylistBtn').click(function (event) {
   // TODO: Display a list of music.
