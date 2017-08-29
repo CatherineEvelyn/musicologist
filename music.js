@@ -19,18 +19,40 @@ $('#musicField').keyup(function(event) {
 
 function renderList() {
   const $list = $('.info').eq(0);
-
   $list.empty();
-
   for (const info of musicInfo) {
     const $item = $('<li class="list-group-item">').text(info);
-
-    $list.append($item)
+    $item.append("<input type='button' value='delete' class='del'>");
+    $list.append($item);
+    $(".del").click(function() {
+      let x = $(this).parent();
+      x.remove();
+    });
   }
 }
+
+
 
 $('#getPlaylistBtn').click(function (event) {
   // TODO: Display a list of music.
   // You may use anything from musicInfo.
-  console.log('Testing Music Call');
+  //console.log('Testing Music Call');
+  let searchKey = musicInfo.join(' ');
+  console.log(searchKey);
+
+  $.ajax({
+    url: "http://itunes.apple.com/search?" + "term=" + searchKey + "&limit=10",
+    dataType: 'json'
+  }).then(function (json) {
+    $("#playlist").empty();
+    if((json.results).length === 0) {
+      $("#playlist").append('<p>No results found!</p>')
+    }
+    $.each(json.results, function( key, value ) {        
+      $("#playlist").append($("<p>").text(value.trackName + " by " + value.artistName));
+  });
+  }).catch(function (err) {
+    console.error( 'something went wrong', err );
+  });
+
 });
