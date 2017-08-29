@@ -1,13 +1,19 @@
 let musicInfo = [];
+$('#errorEmptyQuery').hide();
 
 function addSongFromField(event) {
   event.preventDefault();
 
   const info = $('#musicField').eq(0).val();
 
-  musicInfo.push(info);
-  renderList();
-  $('#musicField').eq(0).val('');
+  if (info == "") {
+    $('#errorEmptyQuery').show();
+  } else {
+    $('#errorEmptyQuery').hide();
+    musicInfo.push(info);
+    renderList();
+    $('#musicField').eq(0).val('');
+  }
 }
 
 $('#addButton').click(addSongFromField);
@@ -42,7 +48,7 @@ $('#getPlaylistBtn').click(function (event) {
   // TODO: Display a list of music.
   // You may use anything from musicInfo.
   //console.log('Testing Music Call');
-  let searchKey = musicInfo.join(' ');
+  let searchKey = musicInfo.join('+');
   console.log(searchKey);
 
   $.ajax({
